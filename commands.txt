@@ -1,0 +1,95 @@
+================================================================
+  EngageAI - Commands to Run the Application
+================================================================
+
+Find your laptop's IP address first (needed for LAN access):
+  Windows:   ipconfig    (look for IPv4 Address under Wi-Fi, e.g. 192.168.1.5)
+  Mac/Linux: ifconfig    (look for inet under en0/wlan0)
+
+All laptops must be on the SAME Wi-Fi network.
+
+----------------------------------------------------------------
+  OPTION 1: Run Locally (without Docker)
+----------------------------------------------------------------
+
+Step 1 — Start Backend:
+  cd backend
+  npm install
+  node server.js
+
+  Backend runs at: http://localhost:4000
+
+Step 2 — Download AI Models (one time only):
+  cd frontend
+  mkdir -p public/models
+  bash scripts/download-models.sh
+
+Step 3 — Start Frontend:
+  cd frontend
+  npm install
+  npm start
+
+  Frontend runs at: http://localhost:3000
+
+----------------------------------------------------------------
+  OPTION 2: Run with Docker (no compose)
+----------------------------------------------------------------
+
+Step 1 — Build and run backend:
+  cd backend
+  docker build -t engageai-backend .
+  docker run -d --name engageai-backend -p 4000:4000 engageai-backend
+
+Step 2 — Build and run frontend:
+  cd frontend
+  docker build -t engageai-frontend .
+  docker run -d --name engageai-frontend -p 3000:80 engageai-frontend
+
+  Frontend runs at: http://localhost:3000
+
+To stop containers:
+  docker stop engageai-frontend engageai-backend
+  docker rm engageai-frontend engageai-backend
+
+To rebuild after code changes:
+  docker stop engageai-frontend engageai-backend
+  docker rm engageai-frontend engageai-backend
+  (then repeat the build and run commands above)
+
+----------------------------------------------------------------
+  HOW TO USE THE APPLICATION
+----------------------------------------------------------------
+
+HOST (Presenter laptop):
+  1. Open http://localhost:3000 in Chrome
+  2. Click "Start Meeting" tab
+  3. Enter your name and click "Start Meeting"
+  4. You will see the dashboard with:
+     - Share link at the top (copy this and send to participants)
+     - Live participant tiles with engagement %, emotion, speech info
+     - Overall engagement meter
+     - Engagement trend graph (line chart over time)
+     - Engagement distribution chart (High/Medium/Low)
+     - Alerts when engagement drops below 40%
+     - Private feedback from participants
+  5. Click "End Session" when done to see the full summary
+
+PARTICIPANT (Other laptops):
+  1. Get the share link from the host
+     Example: http://192.168.1.5:3000?join=A3F1C2
+  2. Open that link in Chrome
+  3. Enter your name and click "Join Meeting"
+  4. Allow camera and microphone permissions
+  5. You will see only your video feed (clean, simple view)
+     - No analytics or metrics shown on your screen
+     - Your engagement is analyzed in the background
+     - You can send private feedback to the host
+  6. Click "Leave Meeting" when done
+
+NOTES:
+  - Use Google Chrome for best compatibility
+  - All laptops must be on the same Wi-Fi network
+  - The host laptop's IP is used in the share link
+  - Camera + Mic permissions are required for participants
+  - No video/audio is recorded — only computed metrics are sent
+================================================================
