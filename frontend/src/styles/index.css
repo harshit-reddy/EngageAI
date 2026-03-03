@@ -1,0 +1,14 @@
+/* ═══════════════════════════════════════════════════════════════
+   EngageAI — CSS Aggregator
+   Import order matters: variables first, responsive last.
+   ═══════════════════════════════════════════════════════════════ */
+@import './variables.css';
+@import './base.css';
+@import './home.css';
+@import './meeting.css';
+@import './toolbar.css';
+@import './monitor.css';
+@import './summary.css';
+@import './panels.css';
+@import './dashboard.css';
+@import './responsive.css';

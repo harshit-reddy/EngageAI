@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(./venv/Scripts/pip list:*)",
+      "Bash(./venv/Scripts/pip uninstall:*)",
+      "Bash(./venv/Scripts/python:*)",
+      "Bash(npx vite:*)"
+    ]
+  }
+}

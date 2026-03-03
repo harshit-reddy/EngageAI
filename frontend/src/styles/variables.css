@@ -1,0 +1,32 @@
+/* ═══════════════════════════════════════════════════════════════
+   CSS Custom Properties (Design Tokens)
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --bg-primary: #f5f5f7;
+  --bg-secondary: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-hover: #f0f0f3;
+  --bg-tile: #1a1a2e;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-glow: rgba(99,102,241,.15);
+  --accent-subtle: rgba(99,102,241,.06);
+  --text-primary: #1a1a2e;
+  --text-secondary: #5f6368;
+  --text-tertiary: #9aa0a6;
+  --border: #e2e2e8;
+  --border-subtle: #ebebf0;
+  --red: #ea4335;
+  --red-hover: #d93025;
+  --green: #34a853;
+  --green-soft: rgba(52,168,83,.08);
+  --yellow: #f9ab00;
+  --yellow-soft: rgba(249,171,0,.08);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,.1);
+}

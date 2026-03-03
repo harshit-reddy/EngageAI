@@ -4,7 +4,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianG
 const Tip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div style={{ background:'#1e2433', border:'1px solid #30363d', borderRadius:8, padding:'8px 12px', fontSize:13, color:'#a78bfa' }}>
+    <div style={{ background:'#1a1a24', border:'1px solid rgba(99,102,241,.3)', borderRadius:8, padding:'8px 12px', fontSize:13, color:'#818cf8', boxShadow:'0 4px 16px rgba(0,0,0,.4)' }}>
       {payload[0].value}%
     </div>
   );
@@ -30,7 +30,7 @@ export default function TrendChart({ data }) {
 
   if (!series.length) {
     return (
-      <div style={{ height:210, display:'flex', alignItems:'center', justifyContent:'center', color:'#374151', fontSize:14 }}>
+      <div style={{ height:210, display:'flex', alignItems:'center', justifyContent:'center', color:'#9aa0a6', fontSize:14 }}>
         Waiting for participants...
       </div>
     );
@@ -40,11 +40,11 @@ export default function TrendChart({ data }) {
     <div style={{ width:'100%', height:210 }}>
       <ResponsiveContainer>
         <LineChart data={series} margin={{ top:6, right:16, bottom:0, left:0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e2433" vertical={false} />
-          <XAxis dataKey="label" tick={{ fill:'#6b7280', fontSize:12 }} axisLine={false} tickLine={false} interval="preserveStartEnd" />
-          <YAxis domain={[0,100]} tick={{ fill:'#6b7280', fontSize:12 }} axisLine={false} tickLine={false} width={30} />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.06)" vertical={false} />
+          <XAxis dataKey="label" tick={{ fill:'rgba(255,255,255,.4)', fontSize:12 }} axisLine={false} tickLine={false} interval="preserveStartEnd" />
+          <YAxis domain={[0,100]} tick={{ fill:'rgba(255,255,255,.4)', fontSize:12 }} axisLine={false} tickLine={false} width={30} />
           <Tooltip content={<Tip />} />
-          <Line type="monotone" dataKey="engagement" stroke="#a78bfa" strokeWidth={2.5} dot={false} isAnimationActive={false} />
+          <Line type="monotone" dataKey="engagement" stroke="#6366f1" strokeWidth={2.5} dot={false} isAnimationActive={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>

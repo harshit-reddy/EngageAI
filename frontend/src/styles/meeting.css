@@ -1,0 +1,430 @@
+/* ═══════════════════════════════════════════════════════════════
+   MEETING ROOM — Dark Teams-like UI
+   ═══════════════════════════════════════════════════════════════ */
+.meeting-room {
+  height: 100vh; display: flex; flex-direction: column;
+  background: #1b1a1f; overflow: hidden;
+}
+
+.meeting-loading {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px;
+  background: #1b1a1f; color: #fff;
+}
+
+/* ── Error card ── */
+.error-card {
+  background: rgba(234,67,53,.1); border: 1px solid rgba(234,67,53,.3);
+  border-radius: var(--radius); padding: 24px 28px; max-width: 480px; text-align: center;
+}
+.error-card-title { color: #f87171; font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+.error-card-msg { color: rgba(255,255,255,.6); font-size: 14px; line-height: 1.5; }
+
+/* ── Header ── */
+.meeting-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px; background: #15151d;
+  border-bottom: 1px solid rgba(255,255,255,.06); flex-shrink: 0;
+  gap: 12px; flex-wrap: wrap; box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+.meeting-header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.meeting-header-right { display: flex; align-items: center; gap: 8px; }
+
+.meeting-logo {
+  font-weight: 800; font-size: 16px; color: #818cf8;
+  display: flex; align-items: center; gap: 6px;
+}
+.meeting-id-badge {
+  background: rgba(99,102,241,.12); border-radius: 6px;
+  padding: 4px 12px; font-family: monospace; font-size: 13px;
+  font-weight: 700; color: #818cf8; letter-spacing: 2px;
+}
+.meeting-timer {
+  font-size: 13px; color: rgba(255,255,255,.5); font-family: monospace;
+  background: rgba(255,255,255,.06); padding: 3px 10px; border-radius: 6px;
+}
+.meeting-live {
+  display: flex; align-items: center; gap: 5px; font-size: 11px;
+  color: #34a853; font-weight: 700; letter-spacing: 0.5px;
+}
+.meeting-analyzing {
+  display: flex; align-items: center; gap: 5px; font-size: 11px;
+  color: #818cf8; font-weight: 700; letter-spacing: 0.5px;
+}
+.meeting-count { font-size: 12px; color: rgba(255,255,255,.5); }
+
+.invite-section { display: flex; align-items: center; gap: 8px; }
+.invite-url {
+  font-size: 11px; color: rgba(255,255,255,.4); font-family: monospace;
+  max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.btn-copy {
+  padding: 5px 14px; border-radius: 6px; border: 1px solid rgba(99,102,241,.5);
+  background: transparent; color: #818cf8; font-size: 11px;
+  font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap;
+  transition: all .15s;
+}
+.btn-copy:hover { background: #6366f1; color: #fff; }
+
+/* ── Alert bar ── */
+.alert-bar { display: flex; gap: 8px; padding: 8px 20px; flex-wrap: wrap; }
+.alert-item {
+  background: rgba(249,171,0,.1); border: 1px solid rgba(249,171,0,.25);
+  border-radius: var(--radius-sm); padding: 6px 14px; font-size: 12px;
+  color: #f9ab00; display: flex; align-items: center; gap: 6px;
+}
+
+/* ── Body ── */
+.meeting-body {
+  flex: 1; display: flex; flex-direction: row;
+  position: relative; overflow: hidden;
+}
+
+.meeting-content {
+  flex: 1; display: flex; flex-direction: column;
+  position: relative; overflow: hidden; min-width: 0;
+}
+
+/* ── Video Grid ── */
+.video-grid-container {
+  flex: 1; display: flex; flex-direction: column;
+  padding: 12px 16px; overflow: hidden;
+  padding-bottom: 80px;
+  background: #1b1a1f;
+}
+
+.video-grid {
+  flex: 1; display: grid; gap: 10px; align-content: center;
+}
+
+.video-tile {
+  position: relative; background: var(--bg-tile);
+  border-radius: var(--radius); overflow: hidden;
+  border: 2px solid transparent;
+  aspect-ratio: 16/9; min-height: 0;
+  transition: border-color .25s, box-shadow .25s;
+  box-shadow: var(--shadow-md);
+}
+.video-tile:hover {
+  border-color: rgba(0,0,0,.1);
+}
+.video-tile.speaking {
+  border-color: var(--green);
+  box-shadow: 0 0 20px rgba(52,168,83,.2), var(--shadow-md);
+}
+
+.video-tile video { width: 100%; height: 100%; object-fit: cover; }
+
+.video-tile-avatar {
+  width: 100%; height: 100%; display: flex;
+  align-items: center; justify-content: center;
+  background: linear-gradient(145deg, #1a1a2e, #2d2d44);
+}
+.avatar-circle {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #818cf8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 800; color: #fff;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.video-tile-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 20px 12px 8px;
+  background: linear-gradient(transparent, rgba(0,0,0,.7));
+  font-size: 13px; font-weight: 600; color: #fff;
+}
+.tile-label-row {
+  display: flex; align-items: center; gap: 6px;
+}
+.tile-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile-mic-icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(234,67,53,.8); flex-shrink: 0;
+}
+.tile-mic-icon.muted { color: #fff; }
+
+.hand-indicator {
+  position: absolute; top: 10px; right: 10px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--yellow); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 20px; z-index: 5;
+  animation: pulse 1.5s ease-in-out infinite;
+  box-shadow: 0 2px 10px rgba(249,171,0,.4);
+}
+
+/* ── Engagement overlay ── */
+.engagement-overlay {
+  position: absolute; top: 10px; left: 10px; z-index: 5;
+}
+.engagement-score {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; color: #fff;
+  backdrop-filter: blur(8px);
+}
+.engagement-score.high { background: rgba(52,168,83,.85); }
+.engagement-score.mid { background: rgba(249,171,0,.85); }
+.engagement-score.low { background: rgba(234,67,53,.85); }
+
+/* ── Attention badge on video tile ── */
+.attention-badge {
+  position: absolute; top: 10px; right: 10px; z-index: 5;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; color: #fff;
+  backdrop-filter: blur(8px);
+  text-transform: capitalize;
+  display: flex; align-items: center; gap: 3px;
+}
+.attention-drowsy { background: rgba(234,67,53,.85); }
+.attention-distracted { background: rgba(249,171,0,.85); }
+.attention-away { background: rgba(154,160,166,.85); }
+
+/* ── Face landmark canvas overlay ── */
+.face-landmark-canvas {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 4;
+  filter: drop-shadow(0 0 2px rgba(0,255,170,.15));
+}
+
+/* "ML TRACKING" badge on tiles when landmarks present */
+.face-tracking-badge {
+  position: absolute; top: 8px; left: 8px; z-index: 5;
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(0,0,0,.6); backdrop-filter: blur(6px);
+  border: 1px solid rgba(0,255,170,.35);
+  border-radius: 6px; padding: 3px 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  color: rgba(0,255,170,.9); text-transform: uppercase;
+}
+.face-tracking-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #00ffaa;
+  box-shadow: 0 0 6px #00ffaa;
+  animation: trackPulse 1.5s ease-in-out infinite;
+}
+@keyframes trackPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.7); }
+}
+
+.screen-share-view {
+  flex: 3; background: #000; border-radius: var(--radius);
+  overflow: hidden; margin-bottom: 8px; min-height: 200px;
+}
+
+/* ── Transcript Bar ── */
+.transcript-bar {
+  max-height: 160px; background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+  padding: 8px 12px; overflow-y: auto; flex-shrink: 0;
+}
+
+/* ── Audio indicator ── */
+.audio-indicator {
+  position: absolute; bottom: 36px; right: 10px; z-index: 5;
+}
+.audio-pulse {
+  display: block; width: 10px; height: 10px;
+  background: var(--green); border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(52,168,83,.5);
+}
+
+/* ── Audio toast ── */
+.audio-toast {
+  position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+  background: rgba(52,168,83,.9); color: #fff;
+  padding: 8px 20px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; z-index: 100;
+  animation: fadeIn .3s;
+}
+
+.remote-audio { display: none; }
+
+/* ── PiP self-view ── */
+.pip-container {
+  position: absolute; bottom: 80px; right: 16px;
+  width: 180px; z-index: 10;
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+  border: 2px solid rgba(255,255,255,.3);
+  transition: width .2s;
+}
+.pip-container .video-tile {
+  aspect-ratio: 4/3;
+}
+.pip-container .video-tile-label { display: none; }
+.pip-container .engagement-overlay { display: none; }
+.pip-container .attention-badge { display: none; }
+.pip-container .hand-indicator { width: 24px; height: 24px; font-size: 14px; top: 4px; right: 4px; }
+
+@media (max-width: 768px) {
+  .pip-container { width: 120px; bottom: 72px; right: 8px; }
+}
+
+/* ── Waiting Lobby ── */
+.lobby-page {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: #1b1a1f;
+}
+.lobby-card {
+  text-align: center; padding: 48px 40px;
+  background: #1a1a24; border-radius: var(--radius-lg);
+  box-shadow: 0 8px 40px rgba(0,0,0,.4); max-width: 400px; width: 90%;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.lobby-logo {
+  font-weight: 800; font-size: 24px; color: #818cf8; margin-bottom: 24px;
+}
+.lobby-card .spinner { margin: 0 auto 20px; }
+.lobby-title {
+  font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 8px;
+}
+.lobby-sub {
+  font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 4px;
+}
+.lobby-meeting-id {
+  font-family: monospace; font-weight: 700; color: #818cf8;
+  letter-spacing: 2px;
+}
+.lobby-hint {
+  font-size: 13px; color: rgba(255,255,255,.4); margin-bottom: 24px;
+}
+.lobby-leave-btn { margin-top: 8px; }
+
+/* ── Lobby notification bar (host) ── */
+.lobby-notification {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 20px; background: rgba(99,102,241,.08);
+  border-bottom: 1px solid rgba(99,102,241,.15);
+}
+.lobby-notification span {
+  font-size: 13px; font-weight: 600; color: #818cf8; flex: 1;
+}
+.lobby-notification button {
+  padding: 5px 14px; border-radius: 6px; border: 1px solid rgba(99,102,241,.5);
+  background: transparent; color: #818cf8; font-size: 12px;
+  font-weight: 600; cursor: pointer; font-family: inherit; transition: all .15s;
+}
+.lobby-notification button:hover { background: #6366f1; color: #fff; }
+.lobby-notification button:last-child { border-color: rgba(234,67,53,.5); color: #f87171; }
+.lobby-notification button:last-child:hover { background: #ea4335; color: #fff; }
+
+/* ── Meeting name in header ── */
+.meeting-name {
+  font-size: 14px; font-weight: 600; color: #fff;
+  max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ── Solo mode: constrain tile when alone ── */
+.video-grid.solo-mode {
+  display: flex; align-items: center; justify-content: center;
+}
+.video-grid.solo-mode .video-tile {
+  max-width: 640px; width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRE-JOIN SCREEN — Teams-like dark pre-join
+   ═══════════════════════════════════════════════════════════════ */
+.prejoin-page {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: #1b1a1f; padding: 20px;
+}
+
+.prejoin-card {
+  display: flex; flex-direction: column; align-items: center;
+  width: 100%; max-width: 480px;
+}
+
+.prejoin-meeting-name {
+  font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 8px;
+  text-align: center; word-break: break-word;
+}
+
+.prejoin-meta {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  margin-bottom: 20px;
+}
+.prejoin-id {
+  font-size: 13px; color: rgba(255,255,255,.5); font-family: monospace;
+  letter-spacing: 1px;
+}
+.prejoin-user {
+  font-size: 14px; color: rgba(255,255,255,.7);
+}
+.prejoin-user strong { color: #fff; }
+
+.prejoin-preview {
+  width: 100%; max-width: 640px; aspect-ratio: 16/9;
+  background: #2d2d3a; border-radius: 12px; overflow: hidden;
+  position: relative; margin-bottom: 20px;
+}
+
+.prejoin-avatar {
+  width: 100%; height: 100%; display: flex;
+  align-items: center; justify-content: center;
+  background: linear-gradient(145deg, #1a1a2e, #2d2d44);
+}
+.prejoin-avatar .avatar-circle {
+  width: 88px; height: 88px; font-size: 32px;
+}
+
+.prejoin-error {
+  color: #f87171; font-size: 13px; text-align: center;
+  margin-bottom: 12px; padding: 8px 16px;
+  background: rgba(248,113,113,.1); border-radius: 8px;
+}
+
+.prejoin-controls {
+  display: flex; gap: 12px; margin-bottom: 20px;
+}
+
+.prejoin-toggle {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 24px; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: all .2s;
+}
+.prejoin-toggle.on {
+  background: rgba(255,255,255,.15); color: #fff;
+}
+.prejoin-toggle.on:hover {
+  background: rgba(255,255,255,.25);
+}
+.prejoin-toggle.off {
+  background: rgba(234,67,53,.15); color: #f87171;
+}
+.prejoin-toggle.off:hover {
+  background: rgba(234,67,53,.25);
+}
+
+.prejoin-join-btn {
+  width: 100%; max-width: 280px; padding: 12px 24px;
+  border-radius: 8px; border: none;
+  background: var(--accent); color: #fff;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: all .2s;
+  margin-bottom: 12px;
+}
+.prejoin-join-btn:hover {
+  filter: brightness(1.1); transform: translateY(-1px);
+}
+
+.prejoin-back-btn {
+  background: none; border: none; color: rgba(255,255,255,.5);
+  font-size: 13px; cursor: pointer; font-family: inherit;
+  padding: 6px 12px; transition: color .15s;
+}
+.prejoin-back-btn:hover { color: #fff; }
+
+@media (max-width: 600px) {
+  .prejoin-card { max-width: 100%; }
+  .prejoin-controls { flex-direction: column; align-items: center; }
+  .prejoin-toggle { width: 100%; max-width: 240px; justify-content: center; }
+  .prejoin-join-btn { max-width: 100%; }
+  .video-grid.solo-mode .video-tile { max-width: 100%; }
+}

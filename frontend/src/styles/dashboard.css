@@ -1,0 +1,135 @@
+/* ═══════════════════════════════════════════════════════════════
+   DASHBOARD (Full page) + MEETING DETAIL PAGE — Dark Theme
+   ═══════════════════════════════════════════════════════════════ */
+.dashboard-page {
+  min-height: 100vh; background: #0d0d12;
+  padding: 0 0 40px; color: #e0e0e0;
+}
+
+.dashboard-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px; background: #15151d;
+  border-bottom: 1px solid rgba(99,102,241,.12);
+  flex-wrap: wrap; gap: 12px; box-shadow: 0 2px 16px rgba(0,0,0,.3);
+}
+.dashboard-topbar-left {
+  display: flex; align-items: center; gap: 16px;
+}
+.dashboard-page-title {
+  font-size: 18px; font-weight: 800; color: #fff; margin: 0;
+}
+
+.dashboard-filter-tabs {
+  display: flex; gap: 4px;
+}
+.dashboard-filter-btn {
+  padding: 7px 20px; border-radius: 6px; border: 1px solid rgba(255,255,255,.1);
+  background: transparent; color: rgba(255,255,255,.5); font-size: 13px;
+  font-weight: 600; cursor: pointer; font-family: inherit; transition: all .15s;
+}
+.dashboard-filter-btn.active {
+  background: #6366f1; color: #fff; border-color: #6366f1;
+}
+.dashboard-filter-btn:hover:not(.active) { background: rgba(255,255,255,.06); color: #fff; }
+
+.dashboard-empty {
+  color: rgba(255,255,255,.4); font-size: 14px;
+  text-align: center; padding: 60px 0;
+}
+
+.dashboard-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 14px; padding: 24px 28px; max-width: 1200px;
+}
+
+.dashboard-card {
+  background: #1a1a24; border-radius: 12px;
+  padding: 20px 22px; border: 1px solid rgba(255,255,255,.06);
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+.dashboard-card.clickable { cursor: pointer; }
+.dashboard-card.clickable:hover {
+  border-color: rgba(99,102,241,.5); box-shadow: 0 6px 30px rgba(99,102,241,.15);
+  transform: translateY(-2px);
+}
+
+.dashboard-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.dashboard-card-id {
+  font-family: monospace; font-weight: 700; font-size: 16px;
+  color: #818cf8; letter-spacing: 2px;
+}
+.dashboard-card-name {
+  font-size: 14px; font-weight: 600; color: rgba(255,255,255,.7);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 180px;
+}
+.dashboard-card-status {
+  font-size: 11px; font-weight: 700; padding: 3px 12px;
+  border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.dashboard-card-status.live {
+  background: rgba(52,168,83,.15); color: #34a853;
+  box-shadow: 0 0 8px rgba(52,168,83,.2);
+}
+.dashboard-card-status.ended { background: rgba(255,255,255,.06); color: rgba(255,255,255,.4); }
+
+.dashboard-card-host {
+  font-size: 15px; font-weight: 600; color: #fff;
+  margin-bottom: 6px;
+}
+.dashboard-card-meta {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: rgba(255,255,255,.4); margin-bottom: 14px;
+}
+
+.dashboard-card-stats {
+  display: flex; gap: 28px;
+}
+.dashboard-stat { display: flex; flex-direction: column; }
+.dashboard-stat-val { font-size: 20px; font-weight: 800; color: #fff; }
+.dashboard-stat-label { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 2px; }
+
+.dashboard-card-footer {
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.06);
+  font-size: 13px; font-weight: 600; color: #818cf8;
+}
+
+/* Summary stat cards in meeting detail */
+.summary-stats {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+}
+.summary-stat-card {
+  background: #1a1a24; border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px; padding: 16px 24px; text-align: center;
+  min-width: 120px; box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.stat-label { font-size: 11px; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.stat-value { font-size: 22px; font-weight: 800; color: #fff; }
+
+/* ── Meeting Detail ── */
+.detail-page {
+  min-height: 100vh; background: #0d0d12;
+  padding-bottom: 40px; color: #e0e0e0;
+}
+
+.detail-header {
+  padding: 18px 28px; background: #15151d;
+  border-bottom: 1px solid rgba(99,102,241,.12);
+  box-shadow: 0 2px 16px rgba(0,0,0,.3);
+}
+
+.detail-back {
+  background: none; border: none; color: #818cf8;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  font-family: inherit; padding: 0; margin-bottom: 10px;
+  display: inline-block;
+}
+.detail-back:hover { text-decoration: underline; }
+
+.detail-title-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}

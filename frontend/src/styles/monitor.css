@@ -1,0 +1,409 @@
+/* ═══════════════════════════════════════════════════════════════
+   MONITOR PAGE — Dark Command Center
+   ═══════════════════════════════════════════════════════════════ */
+.monitor-page {
+  min-height: 100vh; background: #0d0d12;
+  padding-bottom: 40px; color: #e0e0e0;
+}
+
+.monitor-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px; background: #15151d;
+  border-bottom: 1px solid rgba(99,102,241,.15); flex-wrap: wrap; gap: 12px;
+  box-shadow: 0 2px 20px rgba(0,0,0,.4); position: sticky; top: 0; z-index: 20;
+}
+.monitor-header-title {
+  font-weight: 800; font-size: 18px; color: #fff;
+}
+
+/* Two-column layout */
+.monitor-layout {
+  display: flex; gap: 0; max-width: 1800px; margin: 0 auto;
+  min-height: calc(100vh - 60px);
+}
+.monitor-main {
+  flex: 1; min-width: 0; overflow-y: auto;
+}
+.monitor-sidebar {
+  width: 380px; min-width: 340px; max-width: 420px;
+  border-left: 1px solid rgba(99,102,241,.12);
+  background: #12121a;
+  overflow-y: auto; max-height: calc(100vh - 60px);
+  position: sticky; top: 60px;
+}
+.monitor-sidebar-empty {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; height: 300px; text-align: center;
+  padding: 32px;
+}
+
+/* Dashboard grid */
+.monitor-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; padding: 20px 24px;
+}
+
+.monitor-card {
+  background: #1a1a24; border-radius: 12px;
+  padding: 20px; border: 1px solid rgba(255,255,255,.06);
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+.monitor-card-title {
+  color: rgba(255,255,255,.85); font-weight: 700; font-size: 14px;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+
+/* Overall engagement — glowing */
+.overall-engagement { text-align: center; padding: 8px 0; }
+.overall-score {
+  font-size: 56px; font-weight: 800;
+  background: linear-gradient(135deg, #6366f1, #a78bfa);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(99,102,241,.3));
+}
+.overall-bar {
+  background: rgba(255,255,255,.08); border-radius: 6px; height: 10px;
+  overflow: hidden; margin: 12px auto; max-width: 400px;
+}
+.overall-bar-fill {
+  height: 100%; border-radius: 6px;
+  background: linear-gradient(90deg, #6366f1, #a78bfa, #6366f1);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+  transition: width .6s;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.overall-label { font-size: 13px; color: rgba(255,255,255,.5); margin-top: 6px; }
+
+/* Participant tile wrappers (clickable in monitor) */
+.monitor-participant-wrapper {
+  cursor: pointer; border-radius: 12px; padding: 3px;
+  border: 2px solid transparent; transition: border-color .2s, box-shadow .2s;
+}
+.monitor-participant-wrapper:hover {
+  border-color: rgba(99,102,241,.5); box-shadow: 0 0 16px rgba(99,102,241,.2);
+}
+.monitor-participant-wrapper.selected {
+  border-color: #6366f1; box-shadow: 0 0 20px rgba(99,102,241,.35);
+  background: rgba(99,102,241,.06);
+}
+
+/* Monitor controls */
+.monitor-controls { display: flex; gap: 8px; }
+.monitor-ctrl-btn {
+  padding: 6px 16px; border-radius: 6px; font-size: 12px;
+  font-weight: 600; border: none; cursor: pointer;
+  transition: background .2s, transform .1s, box-shadow .2s;
+  font-family: inherit;
+}
+.monitor-ctrl-btn:active { transform: scale(0.97); }
+.monitor-ctrl-btn.start {
+  background: #34a853; color: #fff;
+  box-shadow: 0 0 12px rgba(52,168,83,.3);
+}
+.monitor-ctrl-btn.start:hover { background: #2d9249; box-shadow: 0 0 20px rgba(52,168,83,.4); }
+.monitor-ctrl-btn.stop {
+  background: #ea4335; color: #fff;
+  box-shadow: 0 0 12px rgba(234,67,53,.3);
+}
+.monitor-ctrl-btn.stop:hover { background: #c5221f; box-shadow: 0 0 20px rgba(234,67,53,.4); }
+
+/* ── Live processing indicator ── */
+.monitor-live-indicator {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700; color: #34a853;
+  letter-spacing: 0.5px;
+}
+.monitor-live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #34a853;
+  box-shadow: 0 0 8px rgba(52,168,83,.6), 0 0 20px rgba(52,168,83,.3);
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(52,168,83,.6), 0 0 20px rgba(52,168,83,.3); }
+  50% { box-shadow: 0 0 16px rgba(52,168,83,.8), 0 0 40px rgba(52,168,83,.5); opacity: .6; }
+}
+.monitor-stopped-indicator {
+  font-size: 11px; font-weight: 700; color: #ea4335;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* ── Processing pulse on cards ── */
+.monitor-card.processing {
+  position: relative; overflow: hidden;
+}
+.monitor-card.processing::after {
+  content: ''; position: absolute; top: 0; left: -100%;
+  width: 50%; height: 2px;
+  background: linear-gradient(90deg, transparent, #6366f1, transparent);
+  animation: scanLine 2s linear infinite;
+}
+@keyframes scanLine {
+  0% { left: -50%; }
+  100% { left: 100%; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   PARTICIPANT DETAIL (right sidebar) — Dark
+   ═══════════════════════════════════════════════════════════════ */
+.participant-detail {
+  display: flex; flex-direction: column; height: 100%;
+}
+.pd-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.pd-header h3 {
+  margin: 0; font-size: 16px; font-weight: 700; color: #fff;
+}
+.pd-body {
+  padding: 16px 20px; overflow-y: auto; flex: 1;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.pd-section {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.pd-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .5px; color: rgba(255,255,255,.4);
+}
+
+/* Engagement score in detail */
+.pd-engagement { text-align: center; }
+.pd-score {
+  font-size: 48px; font-weight: 800; line-height: 1;
+  filter: drop-shadow(0 0 12px currentColor);
+}
+.pd-score-label {
+  font-size: 12px; color: rgba(255,255,255,.5); margin-top: 4px;
+}
+.pd-bar {
+  height: 8px; background: rgba(255,255,255,.08); border-radius: 4px;
+  overflow: hidden; margin-top: 8px;
+}
+.pd-bar-fill {
+  height: 100%; border-radius: 4px; transition: width .4s;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* Attention badge */
+.pd-attention-badge {
+  display: inline-block; padding: 5px 14px; border-radius: 12px;
+  font-size: 12px; font-weight: 700; color: #fff;
+  text-transform: capitalize; letter-spacing: .3px;
+  box-shadow: 0 0 12px rgba(0,0,0,.3);
+}
+
+/* Emotion row */
+.pd-emotion-row {
+  display: flex; align-items: center; gap: 10px;
+}
+.pd-emotion-name {
+  font-size: 15px; font-weight: 600; text-transform: capitalize;
+  color: #fff;
+}
+.pd-emotion-conf {
+  font-size: 12px; color: rgba(255,255,255,.5);
+}
+
+/* Metrics grid */
+.pd-metrics-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.pd-metric {
+  background: rgba(255,255,255,.04); border-radius: 8px; padding: 12px;
+  text-align: center; border: 1px solid rgba(255,255,255,.06);
+}
+.pd-metric-val {
+  display: block; font-size: 20px; font-weight: 700; color: #fff;
+}
+.pd-metric-lbl {
+  display: block; font-size: 10px; color: rgba(255,255,255,.4);
+  margin-top: 3px; text-transform: uppercase; letter-spacing: .3px;
+}
+.pd-mini-bar {
+  height: 4px; background: rgba(255,255,255,.08); border-radius: 2px;
+  overflow: hidden; margin-top: 6px;
+}
+.pd-mini-bar-fill {
+  height: 100%; border-radius: 2px; transition: width .4s;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   EMOTION CONFIDENCE CHART (horizontal bars) — Dark
+   ═══════════════════════════════════════════════════════════════ */
+.emotion-bars {
+  display: flex; flex-direction: column; gap: 5px;
+}
+.emotion-bar-row {
+  display: flex; align-items: center; gap: 8px;
+  opacity: 0.4; transition: opacity .2s;
+}
+.emotion-bar-row.active {
+  opacity: 1;
+}
+.emotion-bar-name {
+  width: 65px; font-size: 11px; text-transform: capitalize;
+  color: rgba(255,255,255,.6); font-weight: 500;
+}
+.emotion-bar-track {
+  flex: 1; height: 8px; background: rgba(255,255,255,.06);
+  border-radius: 4px; overflow: hidden;
+}
+.emotion-bar-fill {
+  height: 100%; border-radius: 4px; transition: width .4s;
+  min-width: 2px;
+}
+.emotion-bar-val {
+  width: 34px; text-align: right; font-size: 10px;
+  color: rgba(255,255,255,.5); font-weight: 600;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE VISUALIZATION (compact bars) — Dark
+   ═══════════════════════════════════════════════════════════════ */
+.feature-viz {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.feature-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.feature-row.warn .feature-label,
+.feature-row.warn .feature-value {
+  color: #ea4335;
+}
+.feature-row.warn .feature-bar-fill {
+  background: #ea4335 !important;
+}
+.feature-label {
+  width: 55px; font-size: 11px; color: rgba(255,255,255,.6);
+  font-weight: 600;
+}
+.feature-bar-track {
+  flex: 1; height: 6px; background: rgba(255,255,255,.06);
+  border-radius: 3px; overflow: hidden;
+}
+.feature-bar-fill {
+  height: 100%; border-radius: 3px;
+  background: #6366f1; transition: width .3s;
+}
+.feature-value {
+  width: 48px; text-align: right; font-size: 10px;
+  font-family: 'SF Mono', 'Menlo', monospace;
+  color: rgba(255,255,255,.4);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   FACE LANDMARK CANVAS — Dark
+   ═══════════════════════════════════════════════════════════════ */
+.landmark-detail-canvas {
+  display: block; margin: 0 auto;
+  background: #0a0a10; border-radius: 10px;
+  border: 1px solid rgba(0,255,170,.2);
+  box-shadow: 0 0 24px rgba(0,255,170,.08), inset 0 0 30px rgba(0,0,0,.4);
+  filter: drop-shadow(0 0 3px rgba(0,255,170,.1));
+}
+.landmark-canvas-empty {
+  display: flex; align-items: center; justify-content: center;
+  height: 120px; background: rgba(0,255,170,.03);
+  border-radius: 10px; border: 1px dashed rgba(0,255,170,.15);
+  color: rgba(0,255,170,.4); font-size: 13px;
+  font-family: monospace; letter-spacing: 0.5px;
+}
+
+/* ── ML Face Analysis panel ── */
+.pd-face-analysis {
+  background: rgba(0,255,170,.03);
+  border: 1px solid rgba(0,255,170,.12);
+  border-radius: 10px; padding: 10px;
+}
+.pd-face-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.pd-face-title {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; color: rgba(0,255,170,.85);
+  text-transform: uppercase; letter-spacing: 1px;
+  font-family: monospace;
+}
+.pd-track-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,.2);
+}
+.pd-track-dot.active {
+  background: #00ffaa;
+  box-shadow: 0 0 8px #00ffaa;
+  animation: trackPulse 1.5s ease-in-out infinite;
+}
+@keyframes trackPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.7); }
+}
+.pd-landmark-count {
+  font-size: 10px; font-family: monospace; letter-spacing: 0.5px;
+  color: rgba(0,255,170,.5);
+}
+.pd-face-stats {
+  display: flex; justify-content: space-around; margin-top: 8px;
+  font-size: 11px; color: rgba(255,255,255,.5); font-family: monospace;
+}
+.pd-face-stats b { font-weight: 600; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ENGAGEMENT BREAKDOWN (feature importance) — Dark
+   ═══════════════════════════════════════════════════════════════ */
+.engagement-breakdown {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.eb-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.eb-name {
+  width: 80px; font-size: 11px; color: rgba(255,255,255,.6);
+  font-weight: 500;
+}
+.eb-bar-track {
+  flex: 1; height: 6px; background: rgba(255,255,255,.06);
+  border-radius: 3px; overflow: hidden;
+}
+.eb-bar-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, #6366f1, #a78bfa);
+  transition: width .3s;
+}
+.eb-val {
+  width: 38px; text-align: right; font-size: 10px;
+  color: rgba(255,255,255,.5); font-weight: 600;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — Monitor page on smaller screens
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .monitor-layout { flex-direction: column; }
+  .monitor-sidebar {
+    width: 100%; max-width: none; min-width: 0;
+    border-left: none; border-top: 1px solid rgba(255,255,255,.06);
+    max-height: none; position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .monitor-grid { grid-template-columns: 1fr; padding: 12px; gap: 12px; }
+  .monitor-card { padding: 14px; }
+  .monitor-header { padding: 10px 14px; }
+  .overall-score { font-size: 40px; }
+  .pd-metrics-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pd-body { padding: 12px 14px; }
+}

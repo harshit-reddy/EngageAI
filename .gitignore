@@ -2,10 +2,13 @@
 node_modules/
 
 # Build output
+frontend/dist/
 frontend/build/
 
-# AI models (downloaded at runtime)
-frontend/public/models/
+# Python
+__pycache__/
+*.pyc
+backend/venv/
 
 # Environment
 .env
@@ -23,6 +26,3 @@ desktop.ini
 # Logs
 *.log
 npm-debug.log*
-
-# Backend data (reset each demo)
-backend/db.json

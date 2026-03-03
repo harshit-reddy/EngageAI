@@ -4,7 +4,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 const Tip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div style={{ background:'#1e2433', border:'1px solid #30363d', borderRadius:8, padding:'8px 12px', fontSize:13, color:'#93c5fd' }}>
+    <div style={{ background:'#1a1a24', border:'1px solid rgba(59,130,246,.3)', borderRadius:8, padding:'8px 12px', fontSize:13, color:'#60a5fa', boxShadow:'0 4px 16px rgba(0,0,0,.4)' }}>
       {label}: {payload[0].value} participant{payload[0].value !== 1 ? 's' : ''}
     </div>
   );
@@ -23,10 +23,10 @@ export default function DistributionChart({ participants }) {
     <div style={{ width:'100%', height:210 }}>
       <ResponsiveContainer>
         <BarChart data={bins} margin={{ top:6, right:16, bottom:0, left:0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e2433" vertical={false} />
-          <XAxis dataKey="label" tick={{ fill:'#6b7280', fontSize:11 }} axisLine={false} tickLine={false} />
-          <YAxis allowDecimals={false} tick={{ fill:'#6b7280', fontSize:12 }} axisLine={false} tickLine={false} width={28} />
-          <Tooltip content={<Tip />} cursor={{ fill:'rgba(255,255,255,.04)' }} />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.06)" vertical={false} />
+          <XAxis dataKey="label" tick={{ fill:'rgba(255,255,255,.4)', fontSize:11 }} axisLine={false} tickLine={false} />
+          <YAxis allowDecimals={false} tick={{ fill:'rgba(255,255,255,.4)', fontSize:12 }} axisLine={false} tickLine={false} width={28} />
+          <Tooltip content={<Tip />} cursor={{ fill:'rgba(255,255,255,.03)' }} />
           <Bar dataKey="count" radius={[6,6,0,0]}>
             {bins.map((_, i) => <Cell key={i} fill="#3b82f6" />)}
           </Bar>

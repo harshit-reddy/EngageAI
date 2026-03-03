@@ -1,0 +1,82 @@
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — Media queries
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .home-page { flex-direction: column; }
+  .home-left { padding: 36px 28px; }
+  .home-right { width: 100%; padding: 28px; }
+  .home-h1 { font-size: 26px; }
+
+  .monitor-grid { grid-template-columns: 1fr; }
+  .dashboard-grid { grid-template-columns: 1fr; padding: 16px; }
+
+  .invite-url { display: none; }
+  .tool-btn-label { display: none; }
+  .side-panel { width: 280px; }
+}
+
+@media (max-width: 768px) {
+  /* ── Toolbar mobile ── */
+  .toolbar-wrapper {
+    bottom: 8px; left: 8px; right: 8px;
+    transform: none;
+  }
+  .meeting-toolbar {
+    width: 100%; justify-content: space-around;
+    padding: 6px 8px; gap: 2px;
+  }
+  .toolbar-divider { display: none; }
+  .tool-btn { padding: 8px; min-width: 44px; }
+  .tool-btn-label { display: none; }
+
+  /* ── Video grid mobile ── */
+  .video-grid-container { padding: 8px; padding-bottom: 72px; }
+  .video-grid { gap: 6px; }
+  .video-tile { border-radius: var(--radius-sm); }
+  .avatar-circle { width: 48px; height: 48px; font-size: 18px; }
+  .tile-name { font-size: 11px; }
+  .video-tile-label { padding: 14px 8px 6px; font-size: 11px; }
+  .engagement-score { font-size: 10px; padding: 2px 7px; }
+  .attention-badge { font-size: 9px; padding: 2px 7px; }
+  .hand-indicator { width: 28px; height: 28px; font-size: 16px; }
+}
+
+@media (max-width: 600px) {
+  .home-left { padding: 28px 18px; }
+  .home-right { padding: 18px 14px; }
+  .home-card { padding: 24px 18px; border-radius: var(--radius); }
+  .home-h1 { font-size: 22px; }
+  .home-sub { font-size: 14px; margin-bottom: 24px; }
+
+  .meeting-header { padding: 8px 12px; }
+  .meeting-id-badge { display: none; }
+  .meeting-analyzing { display: none; }
+
+  .summary-stats { grid-template-columns: 1fr; gap: 8px; }
+  .monitor-grid { padding: 12px; gap: 10px; }
+
+  /* ── Side panels go full screen on mobile ── */
+  .side-panel {
+    position: fixed; right: 0; top: 0; bottom: 0; left: 0;
+    width: 100%; z-index: 25;
+    animation: slideInRight .2s ease-out;
+  }
+  .side-panel-header {
+    padding: 14px 16px;
+  }
+  .side-panel-close {
+    font-size: 24px; padding: 6px 10px;
+  }
+
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .tool-btn-label { display: block; }
+}
+
+/* ── Panel slide-in animation ── */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
