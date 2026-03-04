@@ -9,18 +9,24 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 from pymongo import MongoClient
 
-from config import MONGO_URI
+from config import MONGO_URI, CORS_ENABLED, CORS_ORIGINS
 
 logger = logging.getLogger(__name__)
 
+# ── Resolve CORS origins ────────────────────────────────────────
+if not CORS_ENABLED:
+    _origins = "*"
+else:
+    _origins = [o.strip() for o in CORS_ORIGINS.split(",") if o.strip()] or "*"
+
 # ── Flask ─────────────────────────────────────────────────────
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": _origins}})
 
 # ── SocketIO ──────────────────────────────────────────────────
 socketio = SocketIO(
     app,
-    cors_allowed_origins="*",
+    cors_allowed_origins=_origins,
     async_mode="eventlet",
     ping_timeout=60,
     max_http_buffer_size=2_000_000,

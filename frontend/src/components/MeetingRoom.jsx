@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import axios from 'axios';
-import { SERVER } from '../api';
+import { SERVER, authAxios } from '../api';
 import MeetingToolbar from './MeetingToolbar';
 import VideoGrid from './VideoGrid';
 import Whiteboard from './Whiteboard';
@@ -210,7 +210,7 @@ export default function MeetingRoom({ meetingId, userName, role, onLeave, meetin
       }
 
       const io = (await import('socket.io-client')).default;
-      const socket = io({ transports: ['websocket', 'polling'] });
+      const socket = io(SERVER || undefined, { transports: ['websocket', 'polling'] });
       socketRef.current = socket;
 
       socket.on('connect', () => {
@@ -276,15 +276,15 @@ export default function MeetingRoom({ meetingId, userName, role, onLeave, meetin
 
   // ── Action handlers ──
   function handleLeave() { cleanup(); onLeave(); }
-  async function endSession() { try { await axios.patch(`${SERVER}/session/${meetingId}/end`); } catch {} }
+  async function endSession() { try { await authAxios.patch(`${SERVER}/session/${meetingId}/end`); } catch {} }
   function closeSummary() { cleanup(); onLeave(); }
   async function sendFeedback() {
     const msg = window.prompt('Feedback for the presenter:');
     if (!msg?.trim()) return;
     try { await axios.post(`${SERVER}/feedback`, { meetingId, from: userName, message: msg.trim() }); } catch {}
   }
-  async function startAnalysis() { try { await axios.post(`${SERVER}/session/${meetingId}/monitor`); } catch {} }
-  async function stopAnalysis() { try { await axios.post(`${SERVER}/session/${meetingId}/stop-monitor`); } catch {} }
+  async function startAnalysis() { try { await authAxios.post(`${SERVER}/session/${meetingId}/monitor`); } catch {} }
+  async function stopAnalysis() { try { await authAxios.post(`${SERVER}/session/${meetingId}/stop-monitor`); } catch {} }
   function openMonitor() { window.open(`${window.location.origin}?monitor=${meetingId}&name=${encodeURIComponent(userName)}`, '_blank'); }
   function sendReaction(emoji) { socketRef.current?.emit('reaction', { meetingId, name: userName, emoji }); }
   function toggleHand() { const next = !handRaised; setHandRaised(next); socketRef.current?.emit('raise_hand', { meetingId, name: userName, raised: next }); }

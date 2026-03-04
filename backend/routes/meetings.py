@@ -4,6 +4,7 @@ import logging
 
 from flask import Blueprint, jsonify
 
+from routes.admin import admin_required
 from state import rooms
 from models.session import list_sessions
 from models.analytics import read_analytics
@@ -14,7 +15,33 @@ meetings_bp = Blueprint("meetings", __name__)
 
 
 @meetings_bp.route("/meetings", methods=["GET"])
+@admin_required
 def list_meetings():
+    """List all meetings with engagement stats (admin only)
+    ---
+    tags: [Meetings]
+    security: [{ Bearer: [] }]
+    responses:
+      200:
+        description: List of meetings
+        schema:
+          type: object
+          properties:
+            meetings:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: { type: string }
+                  hostName: { type: string }
+                  meetingName: { type: string }
+                  createdAt: { type: integer }
+                  endedAt: { type: integer }
+                  participantCount: { type: integer }
+                  avgEngagement: { type: integer }
+                  isLive: { type: boolean }
+      401: { description: Unauthorized }
+    """
     result = []
     try:
         for s in list_sessions():
@@ -48,7 +75,19 @@ def list_meetings():
 
 
 @meetings_bp.route("/meetings/<meeting_id>/analytics", methods=["GET"])
+@admin_required
 def get_meeting_analytics(meeting_id):
+    """Get detailed analytics for a meeting (admin only)
+    ---
+    tags: [Meetings]
+    security: [{ Bearer: [] }]
+    parameters:
+      - { in: path, name: meeting_id, type: string, required: true }
+    responses:
+      200: { description: Full analytics data including per-participant engagement }
+      401: { description: Unauthorized }
+      404: { description: No analytics found }
+    """
     analytics = read_analytics(meeting_id)
     if not analytics:
         return jsonify({"error": "No analytics found"}), 404

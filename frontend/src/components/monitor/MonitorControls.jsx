@@ -1,18 +1,17 @@
 import React from 'react';
-import axios from 'axios';
-import { SERVER } from '../../api';
+import { SERVER, authAxios } from '../../api';
 
 export default function MonitorControls({ meetingId, analysisStopped, onStatusChange }) {
   async function startMonitoring() {
     try {
-      await axios.post(`${SERVER}/session/${meetingId}/monitor`);
+      await authAxios.post(`${SERVER}/session/${meetingId}/monitor`);
       onStatusChange(false);
     } catch {}
   }
 
   async function stopMonitoring() {
     try {
-      await axios.post(`${SERVER}/session/${meetingId}/stop-monitor`);
+      await authAxios.post(`${SERVER}/session/${meetingId}/stop-monitor`);
       onStatusChange(true);
     } catch {}
   }

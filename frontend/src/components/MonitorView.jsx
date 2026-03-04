@@ -46,7 +46,7 @@ export default function MonitorView({ meetingId, userName }) {
 
   // Socket.IO connection
   useEffect(() => {
-    const socket = io({ transports: ['websocket', 'polling'] });
+    const socket = io(SERVER || undefined, { transports: ['websocket', 'polling'] });
     socketRef.current = socket;
 
     socket.on('connect', () => {

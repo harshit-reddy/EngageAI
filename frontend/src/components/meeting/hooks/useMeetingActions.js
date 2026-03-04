@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import axios from 'axios';
-import { SERVER } from '../../../api';
+import { SERVER, authAxios } from '../../../api';
 
 /**
  * Provides all meeting action handlers as stable callbacks.
@@ -23,7 +23,7 @@ export default function useMeetingActions({
   const handleLeave = useCallback(() => { cleanup(); onLeave(); }, [cleanup, onLeave]);
 
   const endSession = useCallback(async () => {
-    try { await axios.patch(`${SERVER}/session/${meetingId}/end`); } catch {}
+    try { await authAxios.patch(`${SERVER}/session/${meetingId}/end`); } catch {}
   }, [meetingId]);
 
   const closeSummary = useCallback(() => { cleanup(); onLeave(); }, [cleanup, onLeave]);
@@ -37,11 +37,11 @@ export default function useMeetingActions({
   }, [meetingId, userName]);
 
   const startAnalysis = useCallback(async () => {
-    try { await axios.post(`${SERVER}/session/${meetingId}/monitor`); } catch {}
+    try { await authAxios.post(`${SERVER}/session/${meetingId}/monitor`); } catch {}
   }, [meetingId]);
 
   const stopAnalysis = useCallback(async () => {
-    try { await axios.post(`${SERVER}/session/${meetingId}/stop-monitor`); } catch {}
+    try { await authAxios.post(`${SERVER}/session/${meetingId}/stop-monitor`); } catch {}
   }, [meetingId]);
 
   const openMonitor = useCallback(() => {

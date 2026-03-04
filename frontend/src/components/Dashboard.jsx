@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { SERVER } from '../api';
+import { SERVER, authAxios } from '../api';
 
 export default function Dashboard({ onViewAnalytics, onBack }) {
   const [meetings, setMeetings] = useState([]);
@@ -8,7 +7,7 @@ export default function Dashboard({ onViewAnalytics, onBack }) {
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    axios.get(`${SERVER}/meetings`)
+    authAxios.get(`${SERVER}/meetings`)
       .then(r => setMeetings(r.data.meetings || []))
       .catch(() => {})
       .finally(() => setLoading(false));

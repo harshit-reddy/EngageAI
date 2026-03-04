@@ -6,6 +6,7 @@ import time
 from flask import Blueprint, request, jsonify
 
 from extensions import socketio
+from routes.admin import admin_required
 from state import (
     rooms, session_summaries, transcripts,
     chat_messages, raised_hands, monitored_sessions,
@@ -21,7 +22,30 @@ sessions_bp = Blueprint("sessions", __name__)
 
 
 @sessions_bp.route("/session", methods=["POST"])
+@admin_required
 def create():
+    """Create a new meeting session (admin only)
+    ---
+    tags: [Sessions]
+    security: [{ Bearer: [] }]
+    parameters:
+      - in: body
+        name: body
+        schema:
+          type: object
+          properties:
+            name: { type: string, example: "John Doe" }
+            meetingName: { type: string, example: "Sprint Review" }
+            lobbyEnabled: { type: boolean, default: true }
+    responses:
+      200:
+        description: Session created
+        schema:
+          type: object
+          properties:
+            sessionId: { type: string, example: "ABC123" }
+      401: { description: Unauthorized }
+    """
     body = request.get_json(silent=True) or {}
     name = (body.get("name") or "Speaker").strip()
     meeting_name = (body.get("meetingName") or "").strip()
@@ -33,6 +57,19 @@ def create():
 
 @sessions_bp.route("/session/<session_id>", methods=["GET"])
 def validate(session_id):
+    """Get session details (public — used by participants to join)
+    ---
+    tags: [Sessions]
+    parameters:
+      - in: path
+        name: session_id
+        type: string
+        required: true
+    responses:
+      200: { description: Session data }
+      404: { description: Session not found }
+      410: { description: Session has ended }
+    """
     s = get_session(session_id)
     if not s:
         return jsonify({"error": "Session not found"}), 404
@@ -43,7 +80,19 @@ def validate(session_id):
 
 
 @sessions_bp.route("/session/<session_id>/end", methods=["PATCH"])
+@admin_required
 def end(session_id):
+    """End a meeting session (admin only)
+    ---
+    tags: [Sessions]
+    security: [{ Bearer: [] }]
+    parameters:
+      - { in: path, name: session_id, type: string, required: true }
+    responses:
+      200: { description: Session ended with summary }
+      401: { description: Unauthorized }
+      404: { description: Session not found }
+    """
     s = get_session(session_id)
     if not s:
         return jsonify({"error": "Session not found"}), 404
@@ -69,6 +118,15 @@ def end(session_id):
 
 @sessions_bp.route("/session/<session_id>/summary", methods=["GET"])
 def summary(session_id):
+    """Get session summary
+    ---
+    tags: [Sessions]
+    parameters:
+      - { in: path, name: session_id, type: string, required: true }
+    responses:
+      200: { description: Session summary data }
+      404: { description: No summary available }
+    """
     ss = session_summaries.get(session_id)
     if not ss:
         return jsonify({"error": "No summary available"}), 404
@@ -77,7 +135,19 @@ def summary(session_id):
 
 
 @sessions_bp.route("/session/<session_id>/monitor", methods=["POST"])
+@admin_required
 def start_monitor(session_id):
+    """Start ML monitoring for a session (admin only)
+    ---
+    tags: [Sessions]
+    security: [{ Bearer: [] }]
+    parameters:
+      - { in: path, name: session_id, type: string, required: true }
+    responses:
+      200: { description: Monitoring started }
+      401: { description: Unauthorized }
+      404: { description: Session not found }
+    """
     s = get_session(session_id)
     if not s:
         return jsonify({"error": "Session not found"}), 404
@@ -94,7 +164,19 @@ def start_monitor(session_id):
 
 
 @sessions_bp.route("/session/<session_id>/stop-monitor", methods=["POST"])
+@admin_required
 def stop_monitor(session_id):
+    """Stop ML monitoring for a session (admin only)
+    ---
+    tags: [Sessions]
+    security: [{ Bearer: [] }]
+    parameters:
+      - { in: path, name: session_id, type: string, required: true }
+    responses:
+      200: { description: Monitoring stopped }
+      401: { description: Unauthorized }
+      404: { description: Session not found }
+    """
     s = get_session(session_id)
     if not s:
         return jsonify({"error": "Session not found"}), 404

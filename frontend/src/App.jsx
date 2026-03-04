@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { SERVER } from './api';
+import { SERVER, authAxios, getToken, setToken, clearToken } from './api';
 import Home from './components/Home';
 import PreJoinScreen from './components/PreJoinScreen';
 import MeetingRoom from './components/MeetingRoom';
@@ -31,6 +31,15 @@ export default function App() {
   if (monitorId) {
     return <MonitorView meetingId={monitorId} userName={monitorName} />;
   }
+
+  // Verify stored admin token on mount
+  useEffect(() => {
+    const token = getToken();
+    if (!token) return;
+    authAxios.get(`${SERVER}/admin/verify`)
+      .then(() => setIsAdmin(true))
+      .catch(() => clearToken());
+  }, []);
 
   useEffect(() => {
     const saved = sessionStorage.getItem('engageai_session');
@@ -106,8 +115,8 @@ export default function App() {
           onJoin={(id, name, mName) => enterMeeting(id, name, 'audience', mName)}
           preJoinId={preJoinId}
           isAdmin={isAdmin}
-          onAdminLogin={() => setIsAdmin(true)}
-          onAdminLogout={() => setIsAdmin(false)}
+          onAdminLogin={(token) => { setToken(token); setIsAdmin(true); }}
+          onAdminLogout={() => { clearToken(); setIsAdmin(false); }}
           onViewDashboard={viewDashboard}
           onViewAnalytics={viewAnalytics}
         />

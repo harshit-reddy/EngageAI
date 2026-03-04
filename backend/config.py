@@ -11,12 +11,22 @@ load_dotenv()
 # ── Server ────────────────────────────────────────────────────
 PORT = int(os.environ.get("PORT", 5000))
 
+# ── CORS ─────────────────────────────────────────────────────
+# Set CORS_ENABLED=true to restrict origins; provide comma-separated list.
+# Default: disabled (allow all origins).
+CORS_ENABLED = os.environ.get("CORS_ENABLED", "false").lower() == "true"
+CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "*")  # e.g. "https://my-fe.onrender.com,http://localhost:3000"
+
 # ── MongoDB ───────────────────────────────────────────────────
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/EngageAI")
 
 # ── Admin credentials ─────────────────────────────────────────
 ADMIN_USER = os.environ.get("ADMIN_USER", "admin")
 ADMIN_PASS = os.environ.get("ADMIN_PASS", "engageai")
+
+# ── JWT ──────────────────────────────────────────────────────
+JWT_SECRET = os.environ.get("JWT_SECRET", "engageai-secret-change-me")
+JWT_EXPIRY_HOURS = int(os.environ.get("JWT_EXPIRY_HOURS", 24))
 
 # ── ML thresholds ─────────────────────────────────────────────
 EAR_BLINK_THRESHOLD = 0.21

@@ -10,6 +10,24 @@ feedback_bp = Blueprint("feedback", __name__)
 
 @feedback_bp.route("/feedback", methods=["POST"])
 def submit_feedback():
+    """Submit feedback for a meeting
+    ---
+    tags: [Feedback]
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required: [meetingId, message]
+          properties:
+            meetingId: { type: string }
+            from: { type: string, default: Anonymous }
+            message: { type: string }
+    responses:
+      200: { description: Feedback saved }
+      400: { description: Missing required fields }
+    """
     body = request.get_json(silent=True) or {}
     meeting_id = body.get("meetingId")
     message = body.get("message")
@@ -24,5 +42,13 @@ def submit_feedback():
 
 @feedback_bp.route("/feedback/<meeting_id>", methods=["GET"])
 def get_feedback(meeting_id):
+    """Get all feedback for a meeting
+    ---
+    tags: [Feedback]
+    parameters:
+      - { in: path, name: meeting_id, type: string, required: true }
+    responses:
+      200: { description: List of feedback items }
+    """
     fb = db_get_feedback(meeting_id)
     return jsonify({"feedback": fb})

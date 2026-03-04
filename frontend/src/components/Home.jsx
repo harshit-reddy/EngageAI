@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { SERVER } from '../api';
+import { SERVER, authAxios } from '../api';
 import AdminPanel from './home/AdminPanel';
 import JoinForm from './home/JoinForm';
 
@@ -47,7 +47,7 @@ export default function Home({
       const { data } = await axios.post(`${SERVER}/admin/login`, {
         username: adminUser.trim(), password: adminPass,
       });
-      if (data.ok) { onAdminLogin(); setAdminUser(''); setAdminPass(''); }
+      if (data.ok) { onAdminLogin(data.token); setAdminUser(''); setAdminPass(''); }
     } catch (e) {
       setError(e.response?.data?.error || 'Invalid credentials');
     } finally { setBusy(false); }
@@ -73,7 +73,7 @@ export default function Home({
   async function handleStart() {
     setBusy(true); setError('');
     try {
-      const { data } = await axios.post(`${SERVER}/session`, { name: name.trim(), meetingName: meetingName.trim() });
+      const { data } = await authAxios.post(`${SERVER}/session`, { name: name.trim(), meetingName: meetingName.trim() });
       onStart(data.sessionId, name.trim(), meetingName.trim());
     } catch {
       setError('Cannot reach backend. Is the server running on port 5000?');

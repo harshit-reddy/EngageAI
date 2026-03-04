@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { SERVER } from '../api';
+import { SERVER, authAxios } from '../api';
 import TrendChart from './TrendChart';
 import DistributionChart from './DistributionChart';
 import EmotionTimeline from './EmotionTimeline';
@@ -15,7 +14,7 @@ export default function MeetingDetail({ meetingId, onBack }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get(`${SERVER}/meetings/${meetingId}/analytics`)
+    authAxios.get(`${SERVER}/meetings/${meetingId}/analytics`)
       .then(r => setData(r.data))
       .catch(() => setError('Could not load analytics for this meeting.'))
       .finally(() => setLoading(false));

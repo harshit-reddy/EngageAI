@@ -49,12 +49,15 @@ if not ML_AVAILABLE:
     logger.warning("ML analyzer unavailable: %s", _ml_init_error)
     logger.warning("Install deps:  pip install mediapipe opencv-python-headless numpy scikit-learn Pillow")
 
+from flasgger import Swagger
+
 from config import PORT, MONGO_URI
 from extensions import app, socketio
 from routes import register_routes
 from routes.network import network_bp
 from sockets import register_sockets
 from utils import get_local_ip
+from docs.swagger import SWAGGER_TEMPLATE, SWAGGER_CONFIG
 
 # Tell the network route whether ML is active
 network_bp.ML_AVAILABLE = ML_AVAILABLE
@@ -64,6 +67,9 @@ _net_mod.ML_AVAILABLE = ML_AVAILABLE
 # Wire everything up
 register_routes(app)
 register_sockets(socketio, analyzer)
+
+# Swagger UI at /docs
+Swagger(app, template=SWAGGER_TEMPLATE, config=SWAGGER_CONFIG)
 
 if __name__ == "__main__":
     ip = get_local_ip()
