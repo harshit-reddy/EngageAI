@@ -98,19 +98,19 @@
 }
 
 .video-tile {
-  position: relative; background: var(--bg-tile);
-  border-radius: var(--radius); overflow: hidden;
-  border: 2px solid transparent;
+  position: relative; background: #0d0d14;
+  border-radius: 10px; overflow: hidden;
+  border: 2px solid rgba(255,255,255,.08);
   aspect-ratio: 16/9; min-height: 0;
   transition: border-color .25s, box-shadow .25s;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 2px 16px rgba(0,0,0,.4);
 }
 .video-tile:hover {
-  border-color: rgba(0,0,0,.1);
+  border-color: rgba(99,102,241,.3);
 }
 .video-tile.speaking {
-  border-color: var(--green);
-  box-shadow: 0 0 20px rgba(52,168,83,.2), var(--shadow-md);
+  border-color: rgba(59,130,246,.7);
+  box-shadow: 0 0 20px rgba(59,130,246,.25), 0 2px 16px rgba(0,0,0,.4);
 }
 
 .video-tile video { width: 100%; height: 100%; object-fit: cover; }
@@ -140,10 +140,24 @@
 .tile-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tile-mic-icon {
   display: flex; align-items: center; justify-content: center;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: rgba(234,67,53,.8); flex-shrink: 0;
+  width: 22px; height: 22px; border-radius: 50%;
+  flex-shrink: 0; transition: all .2s;
 }
-.tile-mic-icon.muted { color: #fff; }
+.tile-mic-icon.muted {
+  background: rgba(234,67,53,.85); color: #fff;
+}
+.tile-mic-icon.unmuted {
+  background: rgba(255,255,255,.15); color: rgba(255,255,255,.6);
+}
+.tile-mic-icon.unmuted.speaking {
+  background: rgba(59,130,246,.9); color: #fff;
+  box-shadow: 0 0 10px rgba(59,130,246,.7), 0 0 20px rgba(59,130,246,.3);
+  animation: micPulse 0.8s ease-in-out infinite;
+}
+@keyframes micPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(59,130,246,.6), 0 0 16px rgba(59,130,246,.2); }
+  50% { box-shadow: 0 0 14px rgba(59,130,246,.9), 0 0 28px rgba(59,130,246,.4); }
+}
 
 .hand-indicator {
   position: absolute; top: 10px; right: 10px;
@@ -160,13 +174,24 @@
   position: absolute; top: 10px; left: 10px; z-index: 5;
 }
 .engagement-score {
-  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 20px;
   font-size: 12px; font-weight: 700; color: #fff;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px); font-family: monospace;
+  letter-spacing: 0.5px;
 }
-.engagement-score.high { background: rgba(52,168,83,.85); }
-.engagement-score.mid { background: rgba(249,171,0,.85); }
-.engagement-score.low { background: rgba(234,67,53,.85); }
+.engagement-score.high {
+  background: rgba(52,168,83,.85);
+  box-shadow: 0 0 10px rgba(52,168,83,.3);
+}
+.engagement-score.mid {
+  background: rgba(249,171,0,.85);
+  box-shadow: 0 0 10px rgba(249,171,0,.3);
+}
+.engagement-score.low {
+  background: rgba(234,67,53,.85);
+  box-shadow: 0 0 10px rgba(234,67,53,.3);
+}
 
 /* ── Attention badge on video tile ── */
 .attention-badge {
@@ -222,16 +247,9 @@
   padding: 8px 12px; overflow-y: auto; flex-shrink: 0;
 }
 
-/* ── Audio indicator ── */
-.audio-indicator {
-  position: absolute; bottom: 36px; right: 10px; z-index: 5;
-}
-.audio-pulse {
-  display: block; width: 10px; height: 10px;
-  background: var(--green); border-radius: 50%;
-  animation: pulse 1.5s ease-in-out infinite;
-  box-shadow: 0 0 6px rgba(52,168,83,.5);
-}
+/* ── Audio indicator (legacy — kept for remote streams) ── */
+.audio-indicator { display: none; }
+.audio-pulse { display: none; }
 
 /* ── Audio toast ── */
 .audio-toast {

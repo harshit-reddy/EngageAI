@@ -13,6 +13,15 @@ export default function Dashboard({ onViewAnalytics, onBack }) {
       .finally(() => setLoading(false));
   }, []);
 
+  async function handleDelete(e, id) {
+    e.stopPropagation();
+    if (!window.confirm('Delete this meeting and its analytics permanently?')) return;
+    try {
+      await authAxios.delete(`${SERVER}/meetings/${id}`);
+      setMeetings(prev => prev.filter(m => m.id !== id));
+    } catch {}
+  }
+
   const filtered = meetings.filter(m => {
     if (filter === 'active') return m.isLive;
     if (filter === 'past') return m.endedAt != null;
@@ -35,6 +44,12 @@ export default function Dashboard({ onViewAnalytics, onBack }) {
     return `${Math.floor(mins / 60)}h ${mins % 60}m`;
   };
 
+  const totalMeetings = meetings.length;
+  const liveMeetings = meetings.filter(m => m.isLive).length;
+  const avgEng = meetings.length
+    ? Math.round(meetings.reduce((s, m) => s + (m.avgEngagement || 0), 0) / meetings.length)
+    : 0;
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-topbar">
@@ -49,6 +64,24 @@ export default function Dashboard({ onViewAnalytics, onBack }) {
               {f === 'all' ? 'All' : f === 'active' ? 'Active' : 'Past'}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Summary strip */}
+      <div className="dashboard-summary-strip">
+        <div className="dash-summary-item">
+          <span className="dash-summary-val">{totalMeetings}</span>
+          <span className="dash-summary-lbl">Total</span>
+        </div>
+        <div className="dash-summary-item">
+          <span className="dash-summary-val dash-live">{liveMeetings}</span>
+          <span className="dash-summary-lbl">Live Now</span>
+        </div>
+        <div className="dash-summary-item">
+          <span className="dash-summary-val" style={{
+            color: avgEng >= 60 ? '#34d399' : avgEng >= 30 ? '#fbbf24' : 'rgba(255,255,255,.4)',
+          }}>{avgEng}%</span>
+          <span className="dash-summary-lbl">Avg Engagement</span>
         </div>
       </div>
 
@@ -70,9 +103,18 @@ export default function Dashboard({ onViewAnalytics, onBack }) {
               onClick={() => m.hasAnalytics && onViewAnalytics(m.id)}>
               <div className="dashboard-card-header">
                 <span className="dashboard-card-id">{m.id}</span>
-                <span className={`dashboard-card-status ${m.isLive ? 'live' : 'ended'}`}>
-                  {m.isLive ? 'Live' : m.endedAt ? 'Ended' : 'Created'}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span className={`dashboard-card-status ${m.isLive ? 'live' : 'ended'}`}>
+                    {m.isLive ? 'Live' : m.endedAt ? 'Ended' : 'Created'}
+                  </span>
+                  <button className="dashboard-delete-btn" title="Delete meeting"
+                    onClick={(e) => handleDelete(e, m.id)}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               {m.meetingName && <div className="dashboard-card-name">{m.meetingName}</div>}
               <div className="dashboard-card-host">{m.hostName}</div>
@@ -87,7 +129,7 @@ export default function Dashboard({ onViewAnalytics, onBack }) {
                 </div>
                 <div className="dashboard-stat">
                   <span className="dashboard-stat-val" style={{
-                    color: m.avgEngagement >= 60 ? '#34a853' : m.avgEngagement >= 30 ? '#f9ab00' : 'rgba(255,255,255,.4)',
+                    color: m.avgEngagement >= 60 ? '#34d399' : m.avgEngagement >= 30 ? '#fbbf24' : 'rgba(255,255,255,.4)',
                   }}>
                     {m.hasAnalytics ? `${m.avgEngagement}%` : '\u2014'}
                   </span>

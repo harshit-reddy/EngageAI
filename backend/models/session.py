@@ -40,6 +40,11 @@ def end_session(session_id):
     return ended_at
 
 
+def delete_session(session_id):
+    """Delete a session document from DB."""
+    sessions_col.delete_one({"_id": session_id})
+
+
 def list_sessions():
     """Return a cursor of all sessions sorted newest first."""
     from pymongo import DESCENDING

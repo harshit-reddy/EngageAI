@@ -48,6 +48,14 @@ def write_analytics(meeting_id):
         logger.warning("Failed to write analytics for %s: %s", meeting_id, e)
 
 
+def delete_analytics(meeting_id):
+    """Delete analytics for a meeting from MongoDB."""
+    try:
+        analytics_col.delete_one({"_id": meeting_id})
+    except Exception as e:
+        logger.warning("Failed to delete analytics for %s: %s", meeting_id, e)
+
+
 def read_analytics(meeting_id):
     """Read persisted analytics from MongoDB."""
     try:

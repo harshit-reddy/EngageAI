@@ -214,12 +214,19 @@ function VideoTile({ stream, name, muted, mirrored, isLocal, isVideoOff, isMuted
 
       <div className="video-tile-label">
         <div className="tile-label-row">
-          {isMuted && (
+          {isMuted ? (
             <span className="tile-mic-icon muted" title="Muted">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round"
                   d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
                 <line x1="3" y1="3" x2="21" y2="21" strokeWidth="2.5" strokeLinecap="round" />
+              </svg>
+            </span>
+          ) : (
+            <span className={`tile-mic-icon unmuted ${hasAudio ? 'speaking' : ''}`} title="Mic on">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round"
+                  d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
               </svg>
             </span>
           )}
@@ -229,12 +236,6 @@ function VideoTile({ stream, name, muted, mirrored, isLocal, isVideoOff, isMuted
 
       {!isLocal && (
         <audio ref={audioRef} autoPlay playsInline className="remote-audio" />
-      )}
-
-      {hasAudio && !isMuted && (
-        <div className="audio-indicator">
-          <span className="audio-pulse" />
-        </div>
       )}
     </div>
   );

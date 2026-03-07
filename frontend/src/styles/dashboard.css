@@ -32,6 +32,28 @@
 }
 .dashboard-filter-btn:hover:not(.active) { background: rgba(255,255,255,.06); color: #fff; }
 
+/* ── Summary strip ── */
+.dashboard-summary-strip {
+  display: flex; gap: 24px; padding: 16px 28px;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  background: rgba(255,255,255,.02);
+}
+.dash-summary-item {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.dash-summary-val {
+  font-size: 22px; font-weight: 800; color: #fff;
+  font-family: monospace;
+}
+.dash-summary-val.dash-live {
+  color: #34d399;
+  text-shadow: 0 0 8px rgba(52,211,153,.4);
+}
+.dash-summary-lbl {
+  font-size: 10px; color: rgba(255,255,255,.35);
+  text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+}
+
 .dashboard-empty {
   color: rgba(255,255,255,.4); font-size: 14px;
   text-align: center; padding: 60px 0;
@@ -96,6 +118,19 @@
 .dashboard-card-footer {
   margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.06);
   font-size: 13px; font-weight: 600; color: #818cf8;
+}
+
+/* ── Delete button ── */
+.dashboard-delete-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.08); background: transparent;
+  color: rgba(255,255,255,.3); cursor: pointer;
+  transition: all .15s;
+}
+.dashboard-delete-btn:hover {
+  background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.4);
+  color: #f87171;
 }
 
 /* Summary stat cards in meeting detail */

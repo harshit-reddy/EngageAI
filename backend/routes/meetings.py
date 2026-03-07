@@ -6,8 +6,8 @@ from flask import Blueprint, jsonify
 
 from routes.admin import admin_required
 from state import rooms
-from models.session import list_sessions
-from models.analytics import read_analytics
+from models.session import list_sessions, delete_session
+from models.analytics import read_analytics, delete_analytics
 
 logger = logging.getLogger(__name__)
 
@@ -92,3 +92,22 @@ def get_meeting_analytics(meeting_id):
     if not analytics:
         return jsonify({"error": "No analytics found"}), 404
     return jsonify(analytics)
+
+
+@meetings_bp.route("/meetings/<meeting_id>", methods=["DELETE"])
+@admin_required
+def remove_meeting(meeting_id):
+    """Delete a meeting and its analytics (admin only)
+    ---
+    tags: [Meetings]
+    security: [{ Bearer: [] }]
+    parameters:
+      - { in: path, name: meeting_id, type: string, required: true }
+    responses:
+      200: { description: Meeting deleted }
+      401: { description: Unauthorized }
+    """
+    delete_session(meeting_id)
+    delete_analytics(meeting_id)
+    logger.info("meeting deleted   %s", meeting_id)
+    return jsonify({"ok": True})
